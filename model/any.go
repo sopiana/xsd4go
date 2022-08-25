@@ -9,8 +9,6 @@ import (
 type Any interface{
 	//get inner xml file
 	X(indent uint8) string
-	//get go code
-	Go(indent uint8) string
 }
 
 //container for non-schema attributes
@@ -131,4 +129,4 @@ func (ns namespaces) getUri(prefix string) string{
 //get prefix from the namespaces collection
 func (ns namespaces) getPrefix(uri string)string{
 	return ns.uriToPrefix[uri]	
-} 
+}
