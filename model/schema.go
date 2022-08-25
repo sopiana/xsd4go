@@ -1,6 +1,5 @@
 package model
 
-
 type Schema struct {
 	errors     []Error
 	namespaces namespaces

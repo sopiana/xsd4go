@@ -1,9 +1,9 @@
 package model
 
-type All struct{
+type All struct {
 	baseXsd
 }
 
-func (e All)test(){
+func (e All) test() {
 
 }
