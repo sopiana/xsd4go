@@ -6,9 +6,11 @@ import (
 	"strings"
 )
 
-//Specifies information to be used by applications within an annotation element.
+// Specifies information to be used by applications within an annotation element.
 // <appinfo
-//   source = anyURI>
+//
+//	source = anyURI>
+//
 // Content: ({any})*
 // </appinfo>
 type AppInfo struct {
@@ -25,12 +27,12 @@ func New_AppInfo(root *Schema) AppInfo {
 
 func (x AppInfo) X(indent uint8) string {
 	sb := strings.Builder{}
-	sb.WriteString(fmt.Sprintf("%s<appinfo", getIndent(indent)))
+	sb.WriteString(fmt.Sprintf("%s<xs:appinfo", getIndent(indent)))
 	if len(x.source) > 0 {
 		sb.WriteString(fmt.Sprintf(` source = "%s"`, x.source))
 	}
 	if len(x.content) > 0 {
-		sb.WriteString(fmt.Sprintf(`>%s</appinfo>`, x.content))
+		sb.WriteString(fmt.Sprintf(`>%s</xs:appinfo>`, x.content))
 	} else {
 		sb.WriteString("/>")
 	}
@@ -55,7 +57,7 @@ TokenLoop:
 			return err
 		}
 		switch token := tok.(type) {
-		case xml.StartElement: //ignore inner element
+		case xml.StartElement, xml.Comment: //ignore inner element
 		case xml.CharData:
 			x.content += string(token.Copy())
 		case xml.EndElement:

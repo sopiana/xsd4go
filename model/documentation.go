@@ -6,10 +6,12 @@ import (
 	"strings"
 )
 
-//Specifies information to be read or used by users within an annotation element.
+// Specifies information to be read or used by users within an annotation element.
 // <documentation>
-//   source = anyURI
-//   xml:lang = language
+//
+//	source = anyURI
+//	xml:lang = language
+//
 // Content: ({any})*
 // </documentation>
 type Documentation struct {
@@ -29,7 +31,7 @@ func New_Documentation(root *Schema) Documentation {
 
 func (x Documentation) X(indent uint8) string {
 	sb := strings.Builder{}
-	sb.WriteString(fmt.Sprintf(`%s<documentation`, getIndent(indent)))
+	sb.WriteString(fmt.Sprintf(`%s<xs:documentation`, getIndent(indent)))
 
 	if len(x.source) > 0 {
 		sb.WriteString(fmt.Sprintf(` source="%s"`, x.source))
@@ -40,7 +42,7 @@ func (x Documentation) X(indent uint8) string {
 	}
 
 	if len(x.content) > 0 {
-		sb.WriteString(fmt.Sprintf(`>%s</documentation>`, x.content))
+		sb.WriteString(fmt.Sprintf(`>%s</xs:documentation>`, x.content))
 	} else {
 		sb.WriteString(`/>`)
 	}
@@ -67,7 +69,7 @@ TokenLoop:
 			return err
 		}
 		switch token := tok.(type) {
-		case xml.StartElement: //ignore inner element
+		case xml.StartElement, xml.Comment: //ignore inner element
 		case xml.CharData:
 			x.content += string(token.Copy())
 		case xml.EndElement:

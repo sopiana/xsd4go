@@ -5,16 +5,16 @@ import (
 	"fmt"
 )
 
-//interface fo all xsd elements
+// interface fo all xsd elements
 type Any interface {
 	//get inner xml file
 	X(indent uint8) string
 }
 
-//container for non-schema attributes
+// container for non-schema attributes
 type CustomAttributes map[string]string
 
-//get inner string for otherAttrs
+// get inner string for otherAttrs
 func (c CustomAttributes) X() string {
 	var ret string
 	for k, v := range c {
@@ -23,7 +23,7 @@ func (c CustomAttributes) X() string {
 	return ret
 }
 
-//add attribute into otherAttrs field. This function will return error if the namespace is not defined in xsd file
+// add attribute into otherAttrs field. This function will return error if the namespace is not defined in xsd file
 func (c CustomAttributes) add(attr xml.Attr, ns namespaces) error {
 	if len(attr.Name.Space) == 0 {
 		c[attr.Name.Local] = attr.Value
@@ -31,14 +31,14 @@ func (c CustomAttributes) add(attr xml.Attr, ns namespaces) error {
 	}
 
 	if att := ns.getPrefix(attr.Name.Space); len(att) == 0 {
-		return fmt.Errorf("invalid namespace")
+		return fmt.Errorf("invalid namespace %s", attr.Name.Space)
 	} else {
 		c[att] = attr.Value
 	}
 	return nil
 }
 
-//Base type for all xsd component, except schema and annotation element
+// Base type for all xsd component, except schema and annotation element
 type baseXsd struct {
 	//Root Schema Element
 	root *Schema
@@ -55,17 +55,17 @@ type baseXsd struct {
 	annotation *Annotation
 }
 
-//initialize the otherAttrs
+// initialize the otherAttrs
 func (b *baseXsd) initialize() {
 	b.otherAttrs = make(CustomAttributes)
 }
 
-//Add custom attributes from xsd
+// Add custom attributes from xsd
 func (b baseXsd) addCustomAttr(attr xml.Attr) error {
 	return b.otherAttrs.add(attr, b.root.namespaces)
 }
 
-//Base type for Identity Constraints elements: field, key, keyref, selector, unique and element
+// Base type for Identity Constraints elements: field, key, keyref, selector, unique and element
 type baseParticle struct {
 	baseXsd
 
@@ -79,14 +79,14 @@ type baseParticle struct {
 	maxOccurs int
 }
 
-//initialize the otherAttrs maps and set minOccurs and maxOccurs to 1
+// initialize the otherAttrs maps and set minOccurs and maxOccurs to 1
 func (b *baseParticle) initialize() {
 	b.otherAttrs = make(CustomAttributes)
 	b.minOccurs = 1
 	b.maxOccurs = 1
 }
 
-//Base type for Multiple XML Documents and Namespaces elements: import, include and redefine
+// Base type for Multiple XML Documents and Namespaces elements: import, include and redefine
 type baseXmlDocs struct {
 	//Required The URI reference to the location of a schema document to include in the target namespace of the containing schema.
 	schemaLocation string
@@ -95,13 +95,13 @@ type baseXmlDocs struct {
 	schema Schema
 }
 
-//container for namespace used in the xsd file
+// container for namespace used in the xsd file
 type namespaces struct {
 	prefixToUri map[string]string
 	uriToPrefix map[string]string
 }
 
-//create new namespace object
+// create new namespace object
 func New_Namespaces() namespaces {
 	return namespaces{
 		prefixToUri: make(map[string]string),
@@ -109,7 +109,7 @@ func New_Namespaces() namespaces {
 	}
 }
 
-//Add namespace, return error if prefix or uri is duplicated
+// Add namespace, return error if prefix or uri is duplicated
 func (ns namespaces) add(prefix string, uri string) error {
 	if len(ns.prefixToUri[prefix]) > 0 || len(ns.uriToPrefix[uri]) > 0 {
 		return fmt.Errorf("duplicate namespace found")
@@ -121,12 +121,12 @@ func (ns namespaces) add(prefix string, uri string) error {
 	return nil
 }
 
-//get uri from the namespaces collection
+// get uri from the namespaces collection
 func (ns namespaces) getUri(prefix string) string {
 	return ns.prefixToUri[prefix]
 }
 
-//get prefix from the namespaces collection
+// get prefix from the namespaces collection
 func (ns namespaces) getPrefix(uri string) string {
 	return ns.uriToPrefix[uri]
 }
