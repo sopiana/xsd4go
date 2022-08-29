@@ -1,0 +1,9 @@
+<xs:schema targetNamespace="http://sopiana.test" xmlns="http://sopiana.test"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="elem1" type="xs:string" default="anyvalue"/>
+    <xs:element name="elem2" type="xs:boolean" default=" true "/>
+    <xs:element name="elem3" type="xs:decimal" default=".00"/>
+    <xs:element name="elem4" type="xs:float" default="NaN"/>
+    <xs:element name="elem5" type="xs:duration" default="P2Y6M5DT12H35M30S`"/>
+    <xs:element name="elem6" type="xs:dateTime" default="2004-04-12T13:20:00+01:00`"/>
+</xs:schema>

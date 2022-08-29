@@ -11,6 +11,12 @@ type Any interface {
 	X(indent uint8) string
 }
 
+// abstraction of facets
+type Facet interface {
+	//get value
+	Value() any
+}
+
 // container for non-schema attributes
 type CustomAttributes map[string]string
 
